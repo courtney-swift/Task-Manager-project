@@ -16,9 +16,24 @@ const budget = $("#numBudget").val();
     const taskToSave = new Task(title, desc, color, date, status, budget);
     console.log(taskToSave)
     displayTask(taskToSave);
+    
+    //3. Send to Server
+    $.ajax({
+        type:"POST",//HTTP Method : create
+        url: API,
+        data: JSON.stringify(taskToSave),
+        contentType:"application/json",
+        success: function(created){
+            console.log(created);
+            displayTask(created);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
 }
 
-//temporal
+
 
 function displayTask(task){
     let syntax = `
@@ -39,6 +54,27 @@ function displayTask(task){
     $(".list").append(syntax);
 
 }
+
+function updateTask(){
+    $.ajax({
+        type: "PUT",//HTTP method: Modify, update
+        url: "https://106api-b0bnggbsgnezbzcz.westus3-01.azurewebsites.net/api/tasks/1",
+        data: JSON.stringify(
+            {
+                title:"Hello this is the put method",
+                budget: 159
+            }
+        ),
+        contentType: "application/json",
+        success:function(response){
+            console.log(response)
+        },
+        error: function(err){
+            console.log(err);
+        }
+    })
+}
+
 function loadTask(){
     $.ajax({
         type:"GET",
